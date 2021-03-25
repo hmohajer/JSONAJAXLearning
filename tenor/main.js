@@ -2,7 +2,7 @@
 
 // $(".container").attr();
 
-$(function(){ ///ready function
+$(function(){ ///instead of "document.ready function(){}"
     function searchRequest(searchQuery){
         let xhr = new XMLHttpRequest();
 
@@ -40,10 +40,11 @@ function showResult(data,column){
     result = $("#result"+column)
     // console.log(result);
     let url = data.media[0].gif.url;
-    let img = document.createElement("img");
-    img.setAttribute("src",url);
-    img.className = "w-100";
-    $("img").css("margin-bottom","20px")
+    let img = $("<img>");
+    img.attr("src",url);
+    img.addClass("w-100");//className = "w-100";
+    img.css("margin-bottom","20px");
+    // $("img").css("margin-bottom","20px")
     // console.log("object");
     result.append(img);
     
