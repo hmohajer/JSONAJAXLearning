@@ -6,7 +6,7 @@ $(function(){ ///instead of "document.ready function(){}"
     function searchRequest(searchQuery){
         let xhr = new XMLHttpRequest();
 
-        xhr.open("GET", "https://g.tenor.com/v1/search?q="+searchQuery+"&key=4LW63LS2Q7PK");//+searchQuery
+        xhr.open("GET", "https://g.tenor.com/v1/search?q="+searchQuery+"&key=4LW63LS2Q7PK&limit=50");//+searchQuery
         xhr.onreadystatechange = function(){
             // console.log(xhr.readyState);
             if(xhr.readyState === 4 && xhr.status === 200){
