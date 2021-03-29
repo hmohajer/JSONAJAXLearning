@@ -30,46 +30,58 @@
 //---------------------------------------------------------------
 // https://api.telegram.org/bot1736835433:AAGziAhVeF77uywkN8RzQinH8zPhdDQGrlA/sendMessage?chat_id=@hhssbt&text=jigar
 
-const BOOKKEY = "XtMKOIpKgdsHrfGrxpzVgUgBufZHwgGt";
-let selectInput = $("#bookListName");
-$(function () {
-    getBookGenreList();   //temprorily disabled to make not so much request to server
-    randomQuote();
-    let sendMessageBtn = $("#send-message");
-    selectInput.on("change", function () {
-        getBookList(selectInput.val());
-    });
 
-    // $("#send-message").on("click",function(){
+
+//##  BEGIN  ######  MAIN  ##########################################################
+const BOOKKEY = "XtMKOIpKgdsHrfGrxpzVgUgBufZHwgGt";
+const selectInput = $("#bookListName");
+$(function () {
+    
+    //making a list of book genres and putting it inside select input (request from API)
+    requestGenreList();   //temporarily disabled to make not too many request to server
+    requestBookList(selectInput.val());
+
+    //fetching a random quote from API and showing it on page
+    randomQuote();
+    
+    //fetching the list of books and showing them in the page
+    selectInput.on("change", function () {
+        requestBookList(selectInput.val());
+    });
+    
+    //sending message to website admin by user
+    const sendMessageBtn = $("#send-message");
     sendMessageBtn.on("click", function () {
-        let message = $("#subjectInput").val() +"\n";
-        message += $("#msgInput").val()+"\n";
-        message += $("#nameInput").val()+"\n";
-        message += $("#emailInput").val()+"\n";
+        let message = $("#subjectInput").val() + "\n";
+        message += $("#msgInput").val() + "\n";
+        message += $("#nameInput").val() + "\n";
+        message += $("#emailInput").val() + "\n";
         message += $("#cityInput").val();
         sendMessage(encodeURI(message));
-        // console.log("object");
     });
-
+    
+    //calling ip API and get Geo information
     $("#contactBtn").on("click", function () {
         getGeoInfo();
         //sendMessage($("#subjectInput").val()+":"+$("#msgInput").val());
         // console.log("object");
     });
 })
-function getBookGenreList() {
+//##  END  ######  MAIN  ############################################################
+
+//##begin#######################################################################
+function requestGenreList() {
     let xhr = new XMLHttpRequest();
     xhr.open("GET", "https://api.nytimes.com/svc/books/v3/lists/names.json?api-key=" + BOOKKEY, true)
     xhr.responseType = "json";
     xhr.onload = function () {
         if (this.status == 200) {
-            makeBookGenreOption(this.response.results);
+            makeGenreOptions(this.response.results);
         }
     }
     xhr.send();
 }
-
-function makeBookGenreOption(genres) {
+function makeGenreOptions(genres) {
     //name goes into select id="bookListName" 
     //option =>  text "list_name or display_name--- value "list_name_encoded"
     // let selectInput = $("#bookListName");
@@ -80,13 +92,17 @@ function makeBookGenreOption(genres) {
         selectInput.append(option);
     });
 }
+//##end#######################################################################
 
-function getBookList(genre) {
+
+//##begin#######################################################################
+function requestBookList(genre) {
     let xhr = new XMLHttpRequest();
     xhr.open("GET", "https://api.nytimes.com/svc/books/v3/lists.json?list=" + genre + "&api-key=" + BOOKKEY, true)
     xhr.responseType = "json";
     xhr.onload = function () {
         if (this.status == 200) {
+            // makeBookList(this.response.results);
             makeBookList(this.response.results);
         }
     }
@@ -94,21 +110,18 @@ function getBookList(genre) {
 }
 
 function makeBookList(books) {
-    // book list div id="bookList"
-    // amazon_product_url 
-    let bookList = $("#bookList");
+    const bookList = $("#bookList");
     bookList.empty();
-    books.forEach((book, index) => {
-        // console.log(book);
-        let divCol = $("<div class='col-md-6 col-lg-4 col-sm-6 mt-3'></div>");
-        let card = $("<div class='card'></div>"); //style='max-width: 18rem;'
-        let header = $("<div class='card-header w-100'></div>");
+    books.forEach(book => {
+        const divCol = $("<div class='col-md-6 col-lg-4 col-sm-6 mt-3'></div>");
+        const card = $("<div class='card'></div>"); //style='max-width: 18rem;'
+        const header = $("<div class='card-header w-100'></div>");
 
-        let title = $("<h5 class='card-title'></h5>");
-        let div = $("<div class='card-body'></div>");
-        let author = $("<h6 class='card-subtitle mb-2 text-muted small'></h6>");
-        let description = $("<p class='card-text small'></p>"); // class='small'
-        let link = $("<a class='btn btn-outline-success d-block '></a>");
+        const title = $("<h5 class='card-title'></h5>");
+        const div = $("<div class='card-body'></div>");
+        const author = $("<h6 class='card-subtitle mb-2 text-muted small'></h6>");
+        const description = $("<p class='card-text small'></p>"); // class='small'
+        const link = $("<a class='btn btn-outline-success d-block '></a>");
         // let img = $("<img style='display:block;'>"); 
         title.text(book.book_details[0].title);
         description.text(book.book_details[0].description);
@@ -120,20 +133,23 @@ function makeBookList(books) {
         // img.css("width","120px");
         // img.css("margin","auto");
         div.append(title, author, description, link); //img,
-        // div.append(author);
-        // div.append(description);
-        // div.append(link);
-
         divCol.append(card);
         card.append(header, div);
         // divCol.append(img);
         bookList.append(divCol);
     });
 }
+//##end#######################################################################
 
+
+
+//##  Upgrade later  #########  Idea  ########################################
 // https://api.telegram.org/bot1736835433:AAGziAhVeF77uywkN8RzQinH8zPhdDQGrlA/getUpdates
-//ba in link mitonam akharin kasi ke be bot payam dade ro bebinam va javab on ro bedam
-//mishe behesh zaman bedam har 15saniye update ro check kone va akharin payami ke az man hast ro neshoon bede
+// later upgrade: with this link I can see the people who sent message to bot and I can select one of them and send message to them
+//or I can put an timer and every 15 sec it checks that if I send message to bot or not, If so showing that message on the page
+//##end#######################################################################
+
+//##begin#######################################################################
 function sendMessage(msg) {
     let xhr = new XMLHttpRequest();
     // let user = "@hhssbt";
@@ -151,13 +167,21 @@ function sendMessage(msg) {
     }
     xhr.send();
 }
-// $.get('https://www.amazon.com/dp/1789096499?tag=NYTBSREV-20&tag=NYTBSREV-20', function(data) {
+//##end#######################################################################
+
+
+//##  Upgrade later  #########  Idea  #########  NOT WORKING  ################
+// $.get('https://www.amazon.com/dp/1789096499?tag=NYTBSREV-20&tag=NYTBSREV-20', function (data) {
 //     var imgs = $('<div/>').html(data).find('#imgBlkFront');
-//     imgs.each(function(i, img) {
+//     imgs.each(function (i, img) {
 //         console.log(img.src); // show a dialog containing the url of image
 //     });
 // });
+//##end#######################################################################
 
+
+
+//##begin#######################################################################
 function getGeoInfo() {
     let xhr = new XMLHttpRequest();
     xhr.open("GET", "https://freegeoip.app/json/", true)
@@ -171,6 +195,7 @@ function getGeoInfo() {
     xhr.send();
 }
 
+//auto filling message fields
 function fillFormGeo(data) {
     $("#cityInput").val(data.city);
     $("#countryInput").val(data.country_name);
@@ -193,9 +218,9 @@ function fillFormGeo(data) {
 //     console.log(response);
 // }
 
-function randomQuote(url) {
+function randomQuote() {
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://quote-garden.herokuapp.com/api/v3/quotes/random", true)
+    xhr.open("GET", "https://quote-garden.herokuapp.com/api/v3/quotes/random?genre=learning", true)
     xhr.responseType = "json";
     xhr.onload = function () {
         if (this.status == 200) {
@@ -205,8 +230,25 @@ function randomQuote(url) {
     }
     xhr.send();
 }
-function randomQuoteShow(quote){
+function randomQuoteShow(quote) {
     $("#quote").text(quote.data[0].quoteText);
     $("#quoteAuthor").text(quote.data[0].quoteAuthor);
 
+}
+
+//##################################################################
+// Initialize and add the map
+function initMap() {
+    // The location 
+    const pdpLocation = { lat: 52.1427, lng: 6.1961 };
+    // The map, centered 
+    const map = new google.maps.Map(document.querySelector("#map"), {
+        zoom: 12,
+        center: pdpLocation,
+    });
+    // The marker, positioned at 
+    const marker = new google.maps.Marker({
+        position: pdpLocation,
+        map: map,
+    });
 }

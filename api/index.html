@@ -22,6 +22,11 @@
             color: #fff;
             background: coral;
         }
+
+        #map {
+            height: 400px;
+            width: 100%;
+        }
     </style>
 </head>
 
@@ -37,9 +42,14 @@
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Galery</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="./map.html">About</a></li>
+                        <li class="nav-item">
+                            <button type="button" class="btn btn-link nav-link" data-bs-toggle="modal"
+                                data-bs-target="#mapBox" id="">Location</button>
+                        </li>
                     </ul>
+                    <!-- ----------------
+                    the modal form is at the end of the page -->
                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
                         data-bs-target="#contactForm" id="contactBtn">Contact Us</button>
                 </div>
@@ -55,77 +65,32 @@
                 <h2>NewYork Times Best seller books</h2>
                 <label>Select your list of best seller books: </label>
                 <select id="bookListName">
-                    <!-- <option value="combined-print-and-e-book-fiction">Combined Print and E-Book Fiction</option>
-                    <option value="combined-print-and-e-book-nonfiction">Combined Print and E-Book Nonfiction</option>
-                    <option value="hardcover-fiction">Hardcover Fiction</option>
-                    <option value="hardcover-nonfiction">Hardcover Nonfiction</option>
-                    <option value="trade-fiction-paperback">Trade Fiction Paperback</option>
-                    <option value="mass-market-paperback">Mass Market Paperback</option>
-                    <option value="paperback-nonfiction">Paperback Nonfiction</option>
-                    <option value="e-book-fiction">E-Book Fiction</option>
-                    <option value="e-book-nonfiction">E-Book Nonfiction</option>
-                    <option value="hardcover-advice">Hardcover Advice</option>
-                    <option value="paperback-advice">Paperback Advice</option>
-                    <option value="advice-how-to-and-miscellaneous">Advice How-To and Miscellaneous</option>
-                    <option value="hardcover-graphic-books">Hardcover Graphic Books</option>
-                    <option value="paperback-graphic-books">Paperback Graphic Books</option>
-                    <option value="manga">Manga</option>
-                    <option value="combined-print-fiction">Combined Print Fiction</option>
-                    <option value="combined-print-nonfiction">Combined Print Nonfiction</option>
-                    <option value="chapter-books">Chapter Books</option>
-                    <option value="childrens-middle-grade">Childrens Middle Grade</option>
-                    <option value="childrens-middle-grade-e-book">Childrens Middle Grade E-Book</option>
-                    <option value="childrens-middle-grade-hardcover">Childrens Middle Grade Hardcover</option>
-                    <option value="childrens-middle-grade-paperback">Childrens Middle Grade Paperback</option>
-                    <option value="paperback-books">Paperback Books</option>
-                    <option value="picture-books">Picture Books</option>
-                    <option value="series-books">Series Books</option>
-                    <option value="young-adult">Young Adult</option>
-                    <option value="young-adult-e-book">Young Adult E-Book</option>
-                    <option value="young-adult-hardcover">Young Adult Hardcover</option>
-                    <option value="young-adult-paperback">Young Adult Paperback</option>
-                    <option value="animals">Animals</option>
-                    <option value="audio-fiction">Audio Fiction</option>
-                    <option value="audio-nonfiction">Audio Nonfiction</option>
-                    <option value="business-books">Business Books</option>
-                    <option value="celebrities">Celebrities</option>
-                    <option value="crime-and-punishment">Crime and Punishment</option>
-                    <option value="culture">Culture</option>
-                    <option value="education">Education</option>
-                    <option value="espionage">Espionage</option>
-                    <option value="expeditions-disasters-and-adventures">Expeditions Disasters and Adventures</option>
-                    <option value="fashion-manners-and-customs">Fashion Manners and Customs</option>
-                    <option value="food-and-fitness">Food and Fitness</option>
-                    <option value="games-and-activities">Games and Activities</option>
-                    <option value="graphic-books-and-manga">Graphic Books and Manga</option>
-                    <option value="hardcover-business-books">Hardcover Business Books</option>
-                    <option value="health">Health</option>
-                    <option value="humor">Humor</option>
-                    <option value="indigenous-americans">Indigenous Americans</option>
-                    <option value="relationships">Relationships</option>
-                    <option value="mass-market-monthly">Mass Market Monthly</option>
-                    <option value="middle-grade-paperback-monthly">Middle Grade Paperback Monthly</option>
-                    <option value="paperback-business-books">Paperback Business Books</option>
-                    <option value="family">Family</option>
-                    <option value="hardcover-political-books">Hardcover Political Books</option>
-                    <option value="race-and-civil-rights">Race and Civil Rights</option>
-                    <option value="religion-spirituality-and-faith">Religion Spirituality and Faith</option>
-                    <option value="science">Science</option>
-                    <option value="sports">Sports</option>
-                    <option value="travel">Travel</option>
-                    <option value="young-adult-paperback-monthly">Young Adult Paperback Monthly</option> -->
+                    <option value="hardcover-nonfiction">Select a list ...</option>
                 </select>
                 <div id="bookList" class="row"></div>
-
             </div>
+
             <div class="col-md-4">
-                <h3>Quotes</h3>
-                <blockquote class="blockquote">
-                    <p id="quote"></p>
-                </blockquote>
-                <figcaption class="blockquote-footer">
-                    <cite title="Source Title" id="quoteAuthor"></cite>
-                </figcaption>
+                <div>
+                    <h3>Quote</h3>
+                    <blockquote class="blockquote">
+                        <p id="quote"></p>
+                    </blockquote>
+                    <figcaption class="blockquote-footer">
+                        <cite title="Source Title" id="quoteAuthor"></cite>
+                    </figcaption>
+                </div>
+                <div id="commentBox" >
+                    <h5>Comments</h5>
+                    <ul class="list-group overflow-auto vh-100">
+                        <li class="list-group-item list-group-item-secondary">
+                            <h6 id="commentSubject">subject</h6>
+                            <p id="commentText" class="m-0">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eos suscipit et esse?</p>
+                            <p id="name" class="text-end small m-0">Hassan</p>
+                        </li>
+                    </ul>
+
+                </div>
                 <!-- <ul class="list-group">
                     <li class="list-group-item list-group-item-danger">A simple danger list group item</li>
                     <li class="list-group-item list-group-item-secondary">A simple secondary list group item</li>
@@ -140,100 +105,90 @@
                     <li class="list-group-item list-group-item-secondary">A simple secondary list group item</li>
                     <li class="list-group-item list-group-item-secondary">A simple secondary list group item</li>
                 </ul> -->
-
             </div>
-
-
-
         </section>
 
-
-
-
-
-        <!-- <footer class="row bg-dark "> -->
         <footer class="bg-dark ">
             <div class="text-light text-center p-2">
                 <p>Copyright &copy; 2021 Self Development</p>
             </div>
+        </footer>
 
-            <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactForm" -->
-            <!-- data-bs-whatever="@mdo">Contact Us/leave comment</button> -->
-            <div class="modal fade" id="contactForm" tabindex="-1" aria-labelledby="contactFormLabel"
-                aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="contactFormLabel">Message</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <!-- <form>
-                                <div class="mb-3">
-                                    <label for="recipient-name" class="col-form-label">Recipient:</label>
-                                    <input type="text" class="form-control" id="recipient-name">
+        <!-- Message / comment modal ----------------------------------------------------------------->
+        <div class="modal fade" id="contactForm" tabindex="-1" aria-labelledby="contactFormLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="contactFormLabel">Message</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="row g-3">
+                            <div class="input-group">
+                                <span class="input-group-text">Name</span>
+                                <input type="text" class="form-control   me-1 rounded-end" id="nameInput">
+                                <span class="input-group-text rounded-start">Email</span>
+                                <input type="email" class="form-control" id="emailInput">
+                            </div>
+                            <div class="input-group ">
+                                <span class="input-group-text">City</span>
+                                <input type="text" class="form-control  me-1 rounded-end" id="cityInput">
+                                <span class="input-group-text rounded-start">Country</span>
+                                <input type="text" class="form-control" id="countryInput" placeholder="countryInput">
+                            </div>
+                            <div class="col-12">
+                                <input type="text" class="form-control" id="subjectInput" placeholder="Subject" required>
+                            </div>
+                            <div class="col-12">
+                                <textarea type="text" class="form-control" id="msgInput"
+                                    placeholder="Message/Comment" required></textarea>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="IsShowComment">
+                                    <label class="form-check-label" for="IsShowComment">
+                                        I want my comment/message to be shown on this page.
+                                    </label>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="message-text" class="col-form-label">Message:</label>
-                                    <textarea class="form-control" id="message-text"></textarea>
-                                </div>
-                            </form> -->
-                            <form class="row g-3">
-                                <div class="input-group">
-                                    <span class="input-group-text">Name</span>
-                                    <input type="text" class="form-control   me-1 rounded-end" id="nameInput">
-                                    <span class="input-group-text rounded-start">Email</span>
-                                    <input type="email" class="form-control" id="emailInput">
-                                </div>
-                                <div class="input-group ">
-                                    <span class="input-group-text">City</span>
-                                    <input type="text" class="form-control  me-1 rounded-end" id="cityInput">
-                                    <span class="input-group-text rounded-start">Country</span>
-                                    <input type="text" class="form-control" id="countryInput"
-                                        placeholder="countryInput">
-                                </div>
-
-                                <div class="col-12">
-                                    <input type="text" class="form-control" id="subjectInput" placeholder="Subject">
-                                </div>
-                                <div class="col-12">
-                                    <textarea type="text" class="form-control" id="msgInput"
-                                        placeholder="Message/Comment"></textarea>
-                                </div>
-
-                                <div class="col-12">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="IsShowComment">
-                                        <label class="form-check-label" for="IsShowComment">
-                                            I want my comment/message to be shown on this page.
-                                        </label>
-                                    </div>
-                                </div>
-                                <!-- <div class="col-12">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="IsShowComment">
-                                        <label class="form-check-label">
-                                            I want my answer in my email.
-                                        </label>
-                                    </div>
-                                </div> -->
-
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" id="send-message">Send message</button>
-                        </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="send-message">Send message</button>
                     </div>
                 </div>
             </div>
-        </footer>
-    </div> <!-- end of html elements -->
+        </div>
+
+        <!-- location modal ----------------------------------------------------------------->
+        <div class="modal fade" id="mapBox" tabindex="-1" aria-labelledby="mapLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mapLabel">Map</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="row g-3"></form>
+                        <div id="map"></div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- end of html elements --------------------------------------------->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="./main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
         crossorigin="anonymous"></script>
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbZJhaJVq2WgDK-vijazVkVjrY3tSLsy4&callback=initMap">
+        </script>
 </body>
 
 </html>
