@@ -32,34 +32,45 @@
 
 
 
-//##  BEGIN  ######  MAIN  ##########################################################
+//##  BEGIN  ######  global variables  ##########################################################
 const BOOKKEY = "XtMKOIpKgdsHrfGrxpzVgUgBufZHwgGt";
+const BOTKEY = "1736835433:AAH05Lpof0yaZwbJIhS45JkZ3L9a5s63EYGak";
 const selectInput = $("#bookListName");
+//##  BEGIN  ######  MAIN  ##########################################################
 $(function () {
-    
+
     //making a list of book genres and putting it inside select input (request from API)
     requestGenreList();   //temporarily disabled to make not too many request to server
     requestBookList(selectInput.val());
 
     //fetching a random quote from API and showing it on page
     randomQuote();
-    
+
     //fetching the list of books and showing them in the page
     selectInput.on("change", function () {
         requestBookList(selectInput.val());
     });
-    
+
     //sending message to website admin by user
     const sendMessageBtn = $("#send-message");
     sendMessageBtn.on("click", function () {
-        let message = $("#subjectInput").val() + "\n";
-        message += $("#msgInput").val() + "\n";
-        message += $("#nameInput").val() + "\n";
+        const subject = $("#subjectInput").val();
+        const commentText = $("#msgInput").val();
+        const commenter = $("#nameInput").val();
+        let message = subject + "\n";
+        message += commentText + "\n";
+        message += commenter + "\n";
         message += $("#emailInput").val() + "\n";
         message += $("#cityInput").val();
         sendMessage(encodeURI(message));
+        // console.log($("#IsShowComment")[0].checked);
+        // console.log($("#IsShowComment").val());
+        if ($("#IsShowComment")[0].checked === true) {
+            let comment = CommentItem(subject, commentText, commenter);
+            $("#commentBox").append(comment);
+        }
     });
-    
+
     //calling ip API and get Geo information
     $("#contactBtn").on("click", function () {
         getGeoInfo();
@@ -113,30 +124,42 @@ function makeBookList(books) {
     const bookList = $("#bookList");
     bookList.empty();
     books.forEach(book => {
-        const divCol = $("<div class='col-md-6 col-lg-4 col-sm-6 mt-3'></div>");
-        const card = $("<div class='card'></div>"); //style='max-width: 18rem;'
-        const header = $("<div class='card-header w-100'></div>");
 
-        const title = $("<h5 class='card-title'></h5>");
-        const div = $("<div class='card-body'></div>");
-        const author = $("<h6 class='card-subtitle mb-2 text-muted small'></h6>");
-        const description = $("<p class='card-text small'></p>"); // class='small'
-        const link = $("<a class='btn btn-outline-success d-block '></a>");
-        // let img = $("<img style='display:block;'>"); 
-        title.text(book.book_details[0].title);
-        description.text(book.book_details[0].description);
-        author.text(book.book_details[0].author);
-        link.attr("href", book.amazon_product_url);
-        link.text("on Amazon");
-        header.text("Rank: " + book.rank + " on " + book.bestsellers_date);
-        // img.attr("src","https://source.unsplash.com/random/20"+index+"x25"+index);
-        // img.css("width","120px");
-        // img.css("margin","auto");
-        div.append(title, author, description, link); //img,
-        divCol.append(card);
-        card.append(header, div);
-        // divCol.append(img);
-        bookList.append(divCol);
+        // const divCol = $("<div class='col-md-6 col-lg-4 col-sm-6 mt-3'></div>");
+        // const card = $("<div class='card'></div>"); //style='max-width: 18rem;'
+        // const header = $("<div class='card-header w-100'></div>");
+
+        // const title = $("<h5 class='card-title'></h5>");
+        // const div = $("<div class='card-body'></div>");
+        // const author = $("<h6 class='card-subtitle mb-2 text-muted small'></h6>");
+        // const description = $("<p class='card-text small'></p>"); // class='small'
+        // const link = $("<a class='btn btn-outline-success d-block '></a>");
+        // let img = $("<img style='display:block;'>");
+        // header.text("Rank: " + book.rank + " on " + book.bestsellers_date);
+        // title.text(book.book_details[0].title);
+        // description.text(book.book_details[0].description);
+        // author.text(book.book_details[0].author);
+        // link.attr("href", book.amazon_product_url);
+        // link.text("on Amazon");
+        // img.attr("src", "https://source.unsplash.com/random/20" + index + "x25" + index);
+        // img.css("width", "120px");
+        // img.css("margin", "auto");
+        // div.append(title, author, description, link); //img,
+        // divCol.append(card);
+        // card.append(header, div);
+        // // divCol.append(img);
+        // bookList.append(divCol);
+
+        //Better way
+        const header = "Rank: " + book.rank + " on " + book.bestsellers_date;
+        const title = book.book_details[0].title;
+        const author = book.book_details[0].author;
+        const description = book.book_details[0].description;
+        const link = book.amazon_product_url;
+        // const link = {
+        //     url: book.amazon_product_url
+        // };
+        bookList.append(bookItem(header,title, author, description, link));
     });
 }
 //##end#######################################################################
@@ -144,7 +167,7 @@ function makeBookList(books) {
 
 
 //##  Upgrade later  #########  Idea  ########################################
-// https://api.telegram.org/bot1736835433:AAGziAhVeF77uywkN8RzQinH8zPhdDQGrlA/getUpdates
+// https://api.telegram.org/bot1736835433:AAH05Lf0yaZwbJIhS45JkZ3L9a5s63EYGak/getUpdates
 // later upgrade: with this link I can see the people who sent message to bot and I can select one of them and send message to them
 //or I can put an timer and every 15 sec it checks that if I send message to bot or not, If so showing that message on the page
 //##end#######################################################################
@@ -153,8 +176,9 @@ function makeBookList(books) {
 function sendMessage(msg) {
     let xhr = new XMLHttpRequest();
     // let user = "@hhssbt";
-    let user = "837230207";
-    xhr.open("GET", "https://api.telegram.org/bot1736835433:AAGziAhVeF77uywkN8RzQinH8zPhdDQGrlA/sendMessage?chat_id=" + user + "&text=" + msg, true)
+    let user = "-1001425778198";
+    // let user = "837230207";
+    xhr.open("GET", "https://api.telegram.org/bot" + BOTKEY + "/sendMessage?chat_id=" + user + "&text=" + msg, true)
     xhr.responseType = "json";
     xhr.onreadystatechange = function () {
         // console.log(this.status);
@@ -162,7 +186,7 @@ function sendMessage(msg) {
     }
     xhr.onload = function () {
         if (this.status == 200) {
-            // console.log(this.response);
+            // console.log("Message sent!");
         }
     }
     xhr.send();
@@ -200,23 +224,8 @@ function fillFormGeo(data) {
     $("#cityInput").val(data.city);
     $("#countryInput").val(data.country_name);
 }
+//##end#######################################################################
 
-// function requestGet(url) {
-//     let xhr = new XMLHttpRequest();
-//     xhr.open("GET", url, true)
-//     xhr.responseType = "json";
-//     xhr.onload = function () {
-//         if (this.status == 200) {
-//             return this.response;
-//             // console.log(this.response);
-//         }
-//     }
-//     xhr.send();
-// }
-// function randomQuote(){
-//     let response = requestGet("https://quote-garden.herokuapp.com/api/v3/quotes/random");
-//     console.log(response);
-// }
 
 function randomQuote() {
     let xhr = new XMLHttpRequest();
@@ -251,4 +260,32 @@ function initMap() {
         position: pdpLocation,
         map: map,
     });
+}
+
+//##  show comments #################################################
+function CommentItem(subject, commentText, commenter) {
+    return (`
+        <li class="list-group-item list-group-item-secondary">
+            <h6 id="commentSubject">${subject}</h6>
+            <p id="commentText" class="m-0">${commentText}</p>
+            <p id="name" class="text-end small m-0">${commenter}</p>
+        </li>
+    `);
+}
+
+//####  show book ###################################################
+function bookItem(header,title, author, description, link) {
+    return (`
+        <div class="col-md-6 col-lg-4 col-sm-6 mt-3">
+            <div class="card">
+                <div class="card-header w-100">${header}</div>
+                <div class="card-body">
+                    <h5 class="card-title">${title}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted small">${author}</h6>
+                    <p class="card-text small">${description}</p>
+                    <a class="btn btn-outline-success d-block" href="${link}">on Amazon</a>
+                </div>
+            </div>
+        </div>
+    `);
 }
