@@ -15,13 +15,10 @@
 // https://github.com/pprathameshmore/QuoteGarden
 //
 // https://quote-garden.herokuapp.com/api/v3/genres
-// از این لینک لیست زانرها رو در بیار و به مشتری نشون بده که انتخاب کنه
+// 
 //یا چنتا جانر مرتبط رو خودت انتخاب کن و به صورت رندم از اونها یه کوت نشون بده مثلا ?genre=learning
 // https://quote-garden.herokuapp.com/api/v3/quotes/random
 //
-//مشتری بتونه که موضوع خاص رو هم انتخاب کنه و لیست کوت ها رو بیاره
-//
-// //
 //
 // -----------------------------------------
 //https://freegeoip.app/
@@ -34,7 +31,7 @@
 
 //##  BEGIN  ######  global variables  ##########################################################
 const BOOKKEY = "XtMKOIpKgdsHrfGrxpzVgUgBufZHwgGt";
-const BOTKEY = "1736835433:AAH05Lpof0yaZwbJIhS45JkZ3L9a5s63EYGak";
+const BOTKEY = "1736835433:AAH05Lf0yaZwbJIhS45JkZ3L9a5s63EYGak";
 const selectInput = $("#bookListName");
 //##  BEGIN  ######  MAIN  ##########################################################
 $(function () {
@@ -81,6 +78,7 @@ $(function () {
 //##  END  ######  MAIN  ############################################################
 
 //##begin#######################################################################
+//get the different genre from API and put them inside <select> so user can choose between them
 function requestGenreList() {
     let xhr = new XMLHttpRequest();
     xhr.open("GET", "https://api.nytimes.com/svc/books/v3/lists/names.json?api-key=" + BOOKKEY, true)
@@ -107,6 +105,7 @@ function makeGenreOptions(genres) {
 
 
 //##begin#######################################################################
+//make a list of books from selected genre by user
 function requestBookList(genre) {
     let xhr = new XMLHttpRequest();
     xhr.open("GET", "https://api.nytimes.com/svc/books/v3/lists.json?list=" + genre + "&api-key=" + BOOKKEY, true)
@@ -173,6 +172,8 @@ function makeBookList(books) {
 //##end#######################################################################
 
 //##begin#######################################################################
+//send a message (consist of comment or message of user ) to site admin by Telegram API 
+//if selected shows the comment on the page 
 function sendMessage(msg) {
     let xhr = new XMLHttpRequest();
     // let user = "@hhssbt";
@@ -206,6 +207,7 @@ function sendMessage(msg) {
 
 
 //##begin#######################################################################
+//get geo info of user from the API and fill the message form automat
 function getGeoInfo() {
     let xhr = new XMLHttpRequest();
     xhr.open("GET", "https://freegeoip.app/json/", true)
@@ -226,7 +228,7 @@ function fillFormGeo(data) {
 }
 //##end#######################################################################
 
-
+//shows a random quote in learning field from API
 function randomQuote() {
     let xhr = new XMLHttpRequest();
     xhr.open("GET", "https://quote-garden.herokuapp.com/api/v3/quotes/random?genre=learning", true)
