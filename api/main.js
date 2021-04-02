@@ -37,7 +37,7 @@ const selectInput = $("#bookListName");
 $(function () {
 
     //making a list of book genres and putting it inside select input (request from API)
-    requestGenreList();   //temporarily disabled to make not too many request to server
+    requestGenreList();   //temporarily commented to make not too many request to server
     requestBookList(selectInput.val());
 
     //fetching a random quote from API and showing it on page
